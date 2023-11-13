@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn"
+import SignUpGoogle from "./components/SignUpGoogle";
 import AuthDetails from "./components/AuthDetails";
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
 		<div className="App">
 			<SignUp />
 			<LogIn />
+			<SignUpGoogle />
 			<AuthDetails />
 		</div>
 	);
