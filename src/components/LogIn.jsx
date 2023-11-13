@@ -1,18 +1,29 @@
 // import React from "react";
 import { useState } from "react"
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 function LogIn(){
     const [email, setEmail] = useState("");
     const [passwd, setPasswd] = useState("");
 
-    function handleSubmit(){
-        console.log({email, passwd});
+    function logIn(event){
+        event.preventDefault();
+        signInWithEmailAndPassword(auth, email, passwd)
+            .then((userCredential) => {
+                const user = userCredential.user;
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorMessage);
+            });
         return
     }
-    
+
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={logIn}>
                 <h1>LogIn Here</h1>
                 <input 
                     type="email" 
@@ -30,3 +41,5 @@ function LogIn(){
         </>
     )
 }
+
+export default LogIn;
