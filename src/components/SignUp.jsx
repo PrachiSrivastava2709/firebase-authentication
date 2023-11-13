@@ -1,21 +1,35 @@
 // import React from "react";
 import { useReducer } from "react";
 import { INITIAL_STATE, signUpReducer } from "./signUpReducer";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase.js";
 
 function SignUp() {
     const [state, dispatch] = useReducer(signUpReducer, INITIAL_STATE)
 
-    function handleSubmit(event){
-        console.log({state});
-        if (state.tempPasswd !== state.conPasswd){
-            alert("Passwords do not match! \nEnter again");
-        }
+    function signUp(event){
         event.preventDefault();
+        if (state.tempPasswd !== state.conPasswd){ //required conditions of validation
+            alert("Passwords do not match! \nEnter again");
+            return
+        }else{
+            createUserWithEmailAndPassword(auth, state.email, state.conPasswd)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log(userCredential);
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorCode, errorMessage);
+                });
+        }
         return;
     }
+
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={signUp}>
                 <h1>Sign Up here</h1>
                 <input 
                     type="email" 
