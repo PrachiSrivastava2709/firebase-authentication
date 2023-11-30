@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import SignUpGoogle from "./SignUpGoogle";
 
 function LogIn(){
     const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ function LogIn(){
         signInWithEmailAndPassword(auth, email, passwd)
             .then((userCredential) => {
                 const user = userCredential.user;
+                console.log(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -23,7 +25,7 @@ function LogIn(){
 
     return (
         <>
-            <form onSubmit={logIn}>
+            <form method="post" action="/home">
                 <h1>LogIn Here</h1>
                 <input 
                     type="email" 
@@ -36,8 +38,10 @@ function LogIn(){
                     value={passwd}
                     onChange={(event) => setPasswd(event.target.value)} />
 
-                <button type="submit">Submit</button>
+                <button type="submit" onClick={logIn}>Submit</button>
             </form>
+            <h1>OR</h1>
+            <SignUpGoogle />
         </>
     )
 }

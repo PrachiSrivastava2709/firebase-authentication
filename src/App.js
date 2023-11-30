@@ -1,16 +1,35 @@
 // import logo from './logo.svg';
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn"
-import SignUpGoogle from "./components/SignUpGoogle";
-import AuthDetails from "./components/AuthDetails";
+import Home from "./pages/Home";
+import Error from "./pages/Error";
+import Landing from "./pages/Landing";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+const router = createBrowserRouter([
+	{
+	  path: "/",
+	  element: <Landing />,
+	  errorElement: <Error />,
+	},
+	{
+		path: "/signup",
+		element: <SignUp />
+	},
+	{
+		path: "/login",
+		element: <LogIn />
+	},
+	{
+		path: "/home",
+		element: <Home />
+	},
+  ]);
 
 function App() {
 	return (
 		<div className="App">
-			<SignUp />
-			<LogIn />
-			<SignUpGoogle />
-			<AuthDetails />
+			<RouterProvider router={router} />
 		</div>
 	);
 }

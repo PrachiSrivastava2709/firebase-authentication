@@ -2,12 +2,13 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase.js"
+// import { Link } from "react-router-dom";
 
 function AuthDetails() {
     const [authUser, setAuthUser] = useState(null);
 
     useEffect(() => {
-        const listen = onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user){
                 setAuthUser(user);
             }else{
@@ -28,7 +29,7 @@ function AuthDetails() {
         <>
             <div>{authUser ? 
                 <>
-                    <p>Signed In</p> 
+                    {/* <Link to={`/home`}> HOme</Link> */}
                     <button onClick={userSignOut}>Sign Out</button>
                 </>
                 : 
