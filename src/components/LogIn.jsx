@@ -2,23 +2,30 @@
 import { useState } from "react"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 import SignUpGoogle from "./SignUpGoogle";
+import Verify from "./Verify.jsx";
 
 function LogIn(){
     const [email, setEmail] = useState("");
     const [passwd, setPasswd] = useState("");
+    const [verifyMsg, setVerifyMsg] = useState(false);
+    const navigate = useNavigate();
 
     function logIn(event){
         event.preventDefault();
         signInWithEmailAndPassword(auth, email, passwd)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user);
+                return user
+            })
+            .then((user) => {
+                user.emailVerified ? navigate("/home") : setVerifyMsg(true); 
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorMessage);
+                console.log(errorCode, errorMessage);
             });
         return
     }
@@ -42,6 +49,7 @@ function LogIn(){
             </form>
             <h1>OR</h1>
             <SignUpGoogle />
+            <p>{verifyMsg ? <Verify /> : ""}</p>
         </>
     )
 }

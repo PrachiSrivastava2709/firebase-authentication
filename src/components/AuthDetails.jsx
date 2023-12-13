@@ -1,39 +1,25 @@
 // import React from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { signOut } from "firebase/auth";
 import { auth } from "../firebase.js"
-// import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AuthDetails() {
-    const [authUser, setAuthUser] = useState(null);
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user){
-                setAuthUser(user);
-            }else{
-                setAuthUser(null);
-            }
-        });
-    });
+    const navigate = useNavigate();
 
     function userSignOut(){
+        console.log(auth);
         signOut(auth)
             .then(() => {
                 console.log("sign out successful");
+                navigate("/");
             })
             .catch(error => console.log(error));
     }
 
     return (
         <>
-            <div>{authUser ? 
-                <>
-                    {/* <Link to={`/home`}> HOme</Link> */}
-                    <button onClick={userSignOut}>Sign Out</button>
-                </>
-                : 
-                <p>Signed Out</p>}
+            <div>
+                <button onClick={userSignOut}>Sign Out</button>
             </div>
         </>
     )

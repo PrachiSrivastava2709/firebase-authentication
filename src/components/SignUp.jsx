@@ -1,27 +1,30 @@
 // import React from "react";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { INITIAL_STATE, signUpReducer } from "./signUpReducer";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "../firebase.js";
 import SignUpGoogle from "./SignUpGoogle.jsx";
-import { Form } from "react-router-dom";
-// import AuthDetails from "./AuthDetails.jsx";
+import Verify from "./Verify.jsx";
 
 function SignUp() {
     const [state, dispatch] = useReducer(signUpReducer, INITIAL_STATE)
+    const [verifyMsg, setVerifyMsg] = useState(false);
 
     async function signUp(event) {
         event.preventDefault();
         if (state.tempPasswd !== state.conPasswd) { 
             //required conditions of validation
             alert("Passwords do not match! \nEnter again");
-            return
         } else {
             createUserWithEmailAndPassword(auth, state.email, state.conPasswd)
                 .then(async (userCredential) => {
                     const user = userCredential.user;
-                    console.log(user);
-                    await sendEmailVerification(user);
+                    const actionCodeSettings = {
+                        url: 'http://localhost:3000/home',
+                        handleCodeInApp: true
+                      };
+                    setVerifyMsg(true);
+                    sendEmailVerification(user, actionCodeSettings);
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -34,8 +37,7 @@ function SignUp() {
 
     return (
         <>
-        <Form method="post" action="/home">
-            {/* <form method="post" action="/home"> */}
+            <form method="post" action="/home">
                 <h1>Sign Up here</h1>
                 <input
                     type="email"
@@ -54,10 +56,11 @@ function SignUp() {
                     onChange={(e) => { dispatch({ type: "conPasswdChange", payload: e.target.value }) }} />
 
                 <button type="submit" onClick={signUp}>Submit</button>
-            {/* </form> */}
-        </Form>
+            </form>
+
             <h1>OR</h1>
             <SignUpGoogle />
+            <p>{verifyMsg ? <Verify /> : ""}</p>
         </>
     )
 }

@@ -1,10 +1,12 @@
 // import logo from './logo.svg';
 import SignUp from "./components/SignUp";
-import LogIn from "./components/LogIn"
+import LogIn from "./components/LogIn";
+import Verify from "./components/Verify";
 import Home from "./pages/Home";
 import Error from "./pages/Error";
 import Landing from "./pages/Landing";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +26,10 @@ const router = createBrowserRouter([
 		path: "/home",
 		element: <Home />
 	},
+	{
+		path: "/verify",
+		element: <Verify />
+	}
   ]);
 
 function App() {
